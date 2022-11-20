@@ -11,7 +11,9 @@
             <br>
             <br>
 
-            <h1>스노우볼 복리계산기 ⛄️💸</h1>
+            <h1></h1>
+            <h1>원클릭 복리 계산기</h1>
+
 
         </center>
     </div>
@@ -22,7 +24,7 @@
     <br>
     <br>
 
-    <table style="border: 0; width: 70%; height: 200px; margin: auto; text-align: center;">
+    <table style="border: 0; width: 40%; height: 200px; margin: auto; text-align: center;">
 
         <tr>
             <td>투자원금</td>
@@ -53,15 +55,19 @@
     <br>
     <br>
 
-    <div class="d-grid gap-2 col-6 mx-auto">
-        <button type="button" class="btn btn-outline-primary">계산하기</button>
+    <div class="d-grid gap-2 col-6 mx-auto" style="width: 30%;">
+        <button type="button" class="btn btn-outline-primary">Go</button>
     </div>
+
+
+
 
     <script>
         const input_initial = document.querySelector('#initial');
         const input_period = document.querySelector('#period');
         const input_target_return = document.querySelector('#target_return');
 
+        // 숫자 3자리 이상시 콤마 추가하기
         input_initial.addEventListener('keyup', function (e) {
             let value = e.target.value;
             value = Number(value.replaceAll(',', ''));
