@@ -4,7 +4,11 @@ const cors = require('cors')
 
 var app = express()
 
+// 미들웨어
 app.use(cors())
+
+// 컨트롤러
+const Calc = require('./controllers/calc.controller')
 
 // Access-Control-Allow-Origin 적용방법1: 직접 헤더에 적용
 app.all('/*', function (req, res, next) {

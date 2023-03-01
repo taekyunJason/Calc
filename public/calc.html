@@ -35,6 +35,14 @@
             <td>원</td>
         </tr>
         <tr>
+            <td>매월 적립 금액</td>
+            <td>
+                <input type="text" data-type="num" pattern="\d*" inputmode="decimal" id="save_money"
+                    class="form-control" placeholder="Only Number">
+            </td>
+            <td>원</td>
+        </tr>
+        <tr>
             <td>계산기간</td>
             <td>
                 <input type="text" data-type="num" pattern="\d*" inputmode="decimal" id="period" class="form-control"
@@ -56,16 +64,34 @@
     <br>
 
     <div class="d-grid gap-2 col-6 mx-auto" style="width: 30%;">
-        <button type="button" class="btn btn-outline-primary">Go</button>
+        <button type="button" class="btn btn-outline-primary"
+            onclick="calculate(input_initial,input_period,input_target_return,save_money)">Go</button>
     </div>
 
+    <br>
+    <br>
+    <br>
+
+    <table class="table test" style="text-align: center;">
+        <tr>
+            <th>투자기간</th>
+            <th>원금</th>
+            <th>이자</th>
+
+        </tr>
+
+        <tbody id="table1">
+
+        </tbody>
+    </table>
 
 
 
     <script>
-        const input_initial = document.querySelector('#initial');
-        const input_period = document.querySelector('#period');
-        const input_target_return = document.querySelector('#target_return');
+        const input_initial = document.getElementById('initial');
+        const input_period = document.getElementById('period');
+        const input_target_return = document.getElementById('target_return');
+        const input_save_money = document.getElementById('save_money');
 
         // 숫자 3자리 이상시 콤마 추가하기
         input_initial.addEventListener('keyup', function (e) {
@@ -76,6 +102,17 @@
             } else {                   //NaN이 아닌 경우
                 const formatValue = value.toLocaleString('ko-KR');
                 input_initial.value = formatValue;
+            }
+        })
+
+        input_save_money.addEventListener('keyup', function (e) {
+            let value = e.target.value;
+            value = Number(value.replaceAll(',', ''));
+            if (isNaN(value)) {         //NaN인지 판별
+                input_save_money.value = 0;
+            } else {                   //NaN이 아닌 경우
+                const formatValue = value.toLocaleString('ko-KR');
+                input_save_money.value = formatValue;
             }
         })
 
@@ -99,6 +136,54 @@
                 input_target_return.value = formatValue;
             }
         })
+
+        function calculate(input_initial, input_period, input_target_return, input_save_money) {
+
+            let table = document.getElementById('table1')
+            console.log(table)
+
+            table.innerHTML.remove()
+            console.log(table)
+
+            let initial = Number(input_initial.value)
+            let period = Number(input_period.value)
+            let save_money = Number(input_save_money.value)
+            let target_return = Number(input_target_return.value)
+
+
+
+            if (input_target_return.value > 0) {
+                let accInterest = 0
+                let accSeed = 0
+                for (let i = 1; i <= input_period.value; i++) {
+                    if (i === 1) {
+                        let row = `<tr>
+                        <td>${i} 개월</td>
+                        <td>${initial + save_money}</td>
+                        <td>${(initial * target_return / 100 / 12)}</td>
+                       </tr>`
+                        table.innerHTML += row
+
+                        initial += save_money
+                        accInterest += initial * target_return / 100 / 12
+                        accSeed = initial + save_money
+                    } else {
+                        let row = `<tr>
+                            <td>${i} 개월</td>
+                            <td>${initial + save_money}</td>
+                            <td>${Math.round(accSeed * target_return / 100 / 12)}</td>
+                           </tr>`
+                        table.innerHTML += row
+
+                        initial += save_money
+                        accSeed += initial * target_return / 100 / 12
+                        accInterest += accInterest + accSeed * target_return / 100 / 12
+
+                    }
+                }
+
+            }
+        }
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
